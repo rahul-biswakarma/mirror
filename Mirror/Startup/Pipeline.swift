@@ -1,0 +1,33 @@
+import Metal
+
+func build_pipeline(device: MTLDevice) -> MTLRenderPipelineState {
+    let pipelineDescriptor = MTLRenderPipelineDescriptor()
+    let library = device.makeDefaultLibrary()
+
+    pipelineDescriptor.vertexFunction = library?.makeFunction(
+        name: "vertexMain"
+    )
+    pipelineDescriptor.fragmentFunction = library?.makeFunction(
+        name: "fragmentMain"
+    )
+    pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+
+    // Enable Alpha Blending for smooth edges
+    let attachment = pipelineDescriptor.colorAttachments[0]
+    attachment?.isBlendingEnabled = true
+    attachment?.rgbBlendOperation = .add
+    attachment?.sourceRGBBlendFactor = .sourceAlpha
+    attachment?.destinationRGBBlendFactor = .oneMinusSourceAlpha
+
+    attachment?.alphaBlendOperation = .add
+    attachment?.sourceAlphaBlendFactor = .one
+    attachment?.destinationAlphaBlendFactor = .oneMinusSourceAlpha
+
+    do {
+        return try device.makeRenderPipelineState(
+            descriptor: pipelineDescriptor
+        )
+    } catch {
+        fatalError("Could not create pipeline: \(error)")
+    }
+}
