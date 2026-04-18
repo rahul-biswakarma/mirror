@@ -2,9 +2,9 @@
 #define definitions_h
 #include <simd/simd.h>
 
-struct Vertex {
-    vector_float4 position;
-    vector_float3 color;
+struct Particle {
+    vector_float2 position;
+    float size;
 };
 
 #endif // !definitions_h

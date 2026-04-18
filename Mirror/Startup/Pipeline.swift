@@ -12,16 +12,14 @@ func build_pipeline(device: MTLDevice) -> MTLRenderPipelineState {
     )
     pipelineDescriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
 
-    // Enable Alpha Blending for smooth edges
     let attachment = pipelineDescriptor.colorAttachments[0]
     attachment?.isBlendingEnabled = true
     attachment?.rgbBlendOperation = .add
-    attachment?.sourceRGBBlendFactor = .sourceAlpha
-    attachment?.destinationRGBBlendFactor = .oneMinusSourceAlpha
-
+    attachment?.sourceRGBBlendFactor = .one
+    attachment?.destinationRGBBlendFactor = .one
     attachment?.alphaBlendOperation = .add
     attachment?.sourceAlphaBlendFactor = .one
-    attachment?.destinationAlphaBlendFactor = .oneMinusSourceAlpha
+    attachment?.destinationAlphaBlendFactor = .one
 
     do {
         return try device.makeRenderPipelineState(
